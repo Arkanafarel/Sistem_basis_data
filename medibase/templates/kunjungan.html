@@ -1,0 +1,52 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Data Kunjungan</div>
+        <div class="card-subtitle">Kelola semua data kunjungan pasien</div>
+    </div>
+
+    {% if session.get('role') == 'petugas' %}
+    <a href="/kunjungan/tambah" class="btn">➕ Tambah Kunjungan</a>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Pasien</th>
+                <th>Nama Dokter</th>
+                <th>Tanggal Kunjungan</th>
+                <th>Keluhan</th>
+                <th>Diagnosis</th>
+                <th>Daftar Obat</th>
+                <th>Aksi</th>
+            </tr>
+           </thead>
+        <tbody>
+            {% for k in kunjungan %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ k.nama_pasien }}</td>
+                <td>{{ k.nama_dokter }}</td>
+                <td>{{ k.tanggal_kunjungan }}</td>
+                <td>{{ k.keluhan }}</td>
+                <td>{{ k.diagnosis }}</td>
+                <td>{{ k.daftar_obat | safe }}</td>
+                <td>
+                    {% if session.get('role') == 'petugas' %}
+                        <a href="/kunjungan/edit/{{ k.id_kunjungan }}" class="action-link">✏️ Edit</a>
+                        <a href="/kunjungan/hapus/{{ k.id_kunjungan }}" class="action-link delete" onclick="return confirm('Hapus kunjungan?')">🗑️ Hapus</a>
+                    {% else %}
+                        Tidak Ada Aksi
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
